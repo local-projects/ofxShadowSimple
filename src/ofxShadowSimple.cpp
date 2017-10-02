@@ -192,11 +192,11 @@ void ofxShadowSimple::beginRenderPass( ofCamera &aCam ) {
     
     shader.begin();
     shader.setUniformTexture( "tShadowMap", shadowFbo.getDepthTexture(), 3 );
-    ofVec3f camPosInViewSpace = aCam.getPosition() * aCam.getModelViewMatrix();
+    auto camPosInViewSpace = glm::vec4(aCam.getPosition(),1) * aCam.getModelViewMatrix();
     shader.setUniformMatrix4f("u_ShadowTransMatrix", shadowTransMatrix );
-    ofVec3f lpos = lightCam.getPosition() * aCam.getModelViewMatrix();
-    shader.setUniform3fv( "u_lightPosInWorldSpace", &lpos.getPtr()[0] );
-    ofVec3f lightInViewSpace = lightCam.getPosition() * aCam.getModelViewMatrix();
+    auto lpos = glm::vec4(lightCam.getPosition(),1) * aCam.getModelViewMatrix();
+    shader.setUniform3fv( "u_lightPosInWorldSpace", &lpos.x );
+    auto lightInViewSpace = glm::vec4(lightCam.getPosition(),1) * aCam.getModelViewMatrix();
     
     shader.setUniform1f( "u_width", getWidth() );
     shader.setUniform1f( "u_height", getHeight() );
